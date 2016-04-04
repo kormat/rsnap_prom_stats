@@ -1,0 +1,14 @@
+Source: rsnap-prom-stats
+Section: net
+Priority: extra
+Maintainer: Stephen Shirley <kormat+pkgs@gmail.com>
+Build-Depends: debhelper (>= 9), dh-python, python3-all
+Standards-Version: 3.9.3
+Homepage: https://github.com/kormat/rsnap_prom_stats
+X-Python3-Version: >= 3.2
+
+Package: rsnap-prom-stats
+Architecture: all
+Depends: ${misc:Depends}, ${python3:Depends}
+Description: Extract rsnapshot stats and send them to Prometheus.
+ Exports rsnapshot stats to Prometheus via Pushgateway.
