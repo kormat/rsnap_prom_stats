@@ -7,6 +7,8 @@ Exports [rsnapshot](http://rsnapshot.org/) stats to [Prometheus](http://promethe
 
 This assumes that you already have Prometheus setup, and a pushgateway running on the local machine.
 
+A debian package is available from [deb.ichbinn.net](https://deb.ichbinn.net/).
+
 ## Setup
 rsnap_prom_stats needs 2 settings changed in `rsnapshot.conf`. The first is setting `verbose` to at least 3 (so that rsnapshot prints the rsync commands that it runs), and the second is adding `--stats` to the `rsync_long_args` setting, so that rsync prints out stats after every run. Example of how the entries will look:
 ```
