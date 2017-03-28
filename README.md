@@ -10,10 +10,10 @@ This assumes that you already have Prometheus setup, and a pushgateway running o
 A debian package is available from [deb.ichbinn.net](https://deb.ichbinn.net/).
 
 ## Setup
-rsnap_prom_stats needs 2 settings changed in `rsnapshot.conf`. The first is setting `verbose` to at least 3 (so that rsnapshot prints the rsync commands that it runs), and the second is adding `--stats` to the `rsync_long_args` setting, so that rsync prints out stats after every run. Example of how the entries will look:
+rsnap_prom_stats needs 2 settings changed in `rsnapshot.conf`. The first is setting `verbose` to at least 3 (so that rsnapshot prints the rsync commands that it runs), and the second is adding `--stats --no-human-readable` to the `rsync_long_args` setting, so that rsync prints out stats after every run (in a machine-readable format). Example of how the entries will look:
 ```
 verbose         3
-rsync_long_args --delete --numeric-ids --relative --delete-excluded --stats
+rsync_long_args --delete --numeric-ids --relative --delete-excluded --stats --no-human-readable
 ```
 
 ## Running
