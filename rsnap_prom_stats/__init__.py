@@ -32,7 +32,7 @@ RSYNC_STATS = {
     "rsync_duration": "How long rsync ran for",
     # Stats directly from rsync
     "rsync_num_files": "Number of files",
-    "rsync_num_files_xferred": "Number of files transferred",
+    "rsync_num_files_xferred": "Number of regular files transferred",
     "rsync_total_file_size": "Total file size",
     "rsync_total_xferred_file_size": "Total transferred file size",
     "rsync_literal_data": "Literal data",
@@ -71,18 +71,15 @@ class Stats:
         return host, path
 
     def parse(self, line):
-        if ":" not in line:
+        parse_rx = re.compile(r'^(?P<desc>[^:]+): (?P<val>\S+)')
+        m = parse_rx.match(line)
+        if not m:
             return
-        start, rest = line.split(": ")
-        name = self.START_NAME.get(start)
+        name = self.START_NAME.get(m.group('desc'))
         if not name:
             # Skip non-machines lines
             return
-        self._set(name, rest)
-
-    def _set(self, name, rest):
-        parts = rest.split()
-        self._metrics[name] = float(parts[0])
+        self._metrics[name] = float(m.group('val'))
 
     def publish(self, def_labels):
         self._metrics['rsync_end'] = time.time()
@@ -99,7 +96,7 @@ class Stats:
         labels.update(def_labels)
         for name, val in self._metrics.items():
             metric = gauges[name]
-            metric.labels(labels).set(val)
+            metric.labels(**labels).set(val)
 
 
 def main():
