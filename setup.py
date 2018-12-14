@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 setup(
     name="rsnap_prom_stats",
-    version="0.2",
+    version="0.3",
     description="Extracts stats from rsnapshot for Prometheus",
     license="Apache 2.0",
     url="https://github.com/kormat/rsnap_prom_stats",
