@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 # Copyright 2016 Stephen Shirley
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import argparse
+import logging
 import re
 import socket
 import sys
@@ -20,8 +21,8 @@ import time
 
 from prometheus_client import CollectorRegistry, Gauge, push_to_gateway
 
-PUSH_GATEWAY = "localhost:9091"
-JOB_NAME = "rsnapshot"
+DEFAULT_PUSH_GATEWAY = "localhost:9091"
+DEFAULT_JOB_NAME = "rsnapshot"
 
 localhost = socket.getfqdn()
 gauges = {}
@@ -100,15 +101,31 @@ class Stats:
 
 
 def main():
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("--pushgw", default=DEFAULT_PUSH_GATEWAY,
+            help="Address of the pushgateway to publish to.")
+    parser.add_argument("--job", default=DEFAULT_JOB_NAME,
+            help="Pushgateway job name.")
+    parser.add_argument("-v", action="store_true",
+            help="Print some information to stdout.")
+    args = parser.parse_args()
+    logging.basicConfig(level=logging.INFO)
+
     registry = setup_metrics()
     start = time.time()
+    if args.v:
+        logging.info("started")
     def_labels = {'instance': socket.getfqdn()}
     process_input(def_labels)
     end = time.time()
+    if args.v:
+        logging.info("finished reading output.")
     gauges["rsnapshot_start"].labels(def_labels).set(start)
     gauges["rsnapshot_end"].labels(def_labels).set(end)
     gauges["rsnapshot_duration"].labels(def_labels).set(end - start)
-    push_to_gateway(PUSH_GATEWAY, job=JOB_NAME, registry=registry)
+    if args.v:
+        logging.info("publishing to pushgateway @ %s", args.pushgw)
+    push_to_gateway(args.pushgw, job=args.job, registry=registry)
 
 
 def setup_metrics():
