@@ -1,18 +1,24 @@
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
 git_repository(
-    name = "io_bazel_rules_python",
+    name = "rules_python",
     remote = "https://github.com/bazelbuild/rules_python.git",
-    commit = "f3a6a8d00a51a1f0e6d61bc7065c19fea2b3dd7a",
+    commit = "4b84ad270387a7c439ebdccfd530e2339601ef27",
+    shallow_since = "1564776078 -0400",
 )
+
+load("@rules_python//python:repositories.bzl", "py_repositories")
+py_repositories()
+
+load("@rules_python//python:pip.bzl", "pip_repositories", "pip_import")
+pip_repositories()
 
 git_repository(
     name = "subpar",
     remote = "https://github.com/google/subpar",
-    tag = "1.3.0",
+    commit = "35bb9f0092f71ea56b742a520602da9b3638a24f",
+    shallow_since = "1557863961 -0400",
 )
-
-load("@io_bazel_rules_python//python:pip.bzl", "pip_repositories", "pip_import")
-
-pip_repositories()
 
 pip_import(
    name = "pip_deps",
