@@ -5,7 +5,7 @@ Exports [rsnapshot](http://rsnapshot.org/) stats to [Prometheus](http://promethe
 A running pushgateway instance.
 
 ## Installation:
-Download a binary from the [releases](https://github.com/kormat/rsnap_prom_stats/releases) page, install somewhere in your $PATH (e.g. `/usr/local/bin`), and make it executable.
+Download a binary (`.par`) from the [releases](https://github.com/kormat/rsnap_prom_stats/releases) page, install somewhere in your $PATH (e.g. `/usr/local/bin`), and make it executable.
 
 ## Setup
 `rsnap_prom_stats` needs 2 settings changed in `rsnapshot.conf`. The first is setting `verbose` to at least 4 (so that rsnapshot prints the rsync commands that it runs, and the resulting stats), and the second is adding `--stats --no-human-readable` to the `rsync_long_args` setting, so that rsync prints out stats after every run (in a machine-readable format). It's also recommended to add `--no-verbose` to `rsync_long_args`, to reduce [log spam](https://github.com/rsnapshot/rsnapshot/issues/203#issuecomment-369386151). Example of how the entries will look:
